@@ -5,9 +5,9 @@ let maxSum = 0;
 data = data.split("\n" + "\n");
 let indexOfElf;
 data.forEach((elf, index) => {
-	let caloriesSum = 0;
-	elf.split("\n").forEach((item) => {
-		caloriesSum += +item;
+    let caloriesSum = 0;
+    elf.split("\n").forEach((item) => {
+		caloriesSum +=+item;
 
 		if (caloriesSum > maxSum) {
 			maxSum = caloriesSum;
