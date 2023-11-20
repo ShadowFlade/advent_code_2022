@@ -3,9 +3,7 @@ const fs = require('fs')
 
 const filePath = path.resolve(__dirname + '/data.txt');
 const data = fs.readFileSync(filePath, { encoding: 'utf8' })
-console.log(data.slice(0, 10))
 const rounds = data.split('\n');
-console.log(rounds.slice(0, 5), ' rounds')
 const elfHandds = {
     A: 'rock',
     B: 'paper',
@@ -38,14 +36,12 @@ function whoWon(round) {
     const hisHand = round[0]
     const myPoints = pointsForHand[yourHands[myHand]];
     let pointsForResult = 0;
-    for (const comb of combinations){
+    for (const comb of combinations) {
         if (elfHandds[hisHand] == yourHands[myHand]) {
             pointsForResult = 3;
-            console.log('draw', pointsForResult)
             break
         } else if (comb.includes(elfHandds[hisHand]) && comb.includes(yourHands[myHand])) {
             pointsForResult = comb[1] == yourHands[myHand] ? 6 : 0;
-            console.log(pointsForResult, ' points result')
             break
         }
     }
