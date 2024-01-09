@@ -2,6 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 const filePath = path.resolve(__dirname, "./data.txt");
 let data = fs.readFileSync(filePath, { encoding: "utf8" }).split("\n");
+console.log(data,' data');
 const alphabet = [
 	"a",
 	"b",
@@ -40,18 +41,7 @@ function calcPriority(letter: string): number {
 	return index + upperCaseMult;
 }
 let sum = 0;
-for (const line of data) {
+for (const i in data) {
 	let repeatingLetter = "";
-	const middle = Math.floor(line.length / 2);
-	const firstHalf = line.slice(0, middle);
-	const secondHalf = line.slice(middle);
-	for (let i = 0; i < line.length; i++) {
-		if (firstHalf.includes(line[i]) && secondHalf.includes(line[i])) {
-			repeatingLetter = line[i];
-			break;
-		}
-	}
-	const priority = calcPriority(repeatingLetter);
-	sum += priority;
+    data[i]
 }
-console.log(sum, " sum");
