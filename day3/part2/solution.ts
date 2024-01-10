@@ -40,20 +40,17 @@ function solution32() {
             elfTempGroup = [];
 		}
 	}
-    console.log(elfGroups,' groups')
 	function calcPriority(letter: string): number {
 		const isUpperCase =
 			alphabet.includes(letter.toLowerCase()) &&
 			!alphabet.includes(letter);
 		const index =
 			alphabet.indexOf(isUpperCase ? letter.toLowerCase() : letter) + 1;
-        console.log(index,' index');
 		const upperCaseMult = isUpperCase ? 26 : 0;
 		return index + upperCaseMult;
 	}
 	let sum = 0;
     let counter = 0;
-    console.log(elfGroups.length,' length');
 	for (const group of elfGroups) {
 		let repeatingLetter = "";
 		group[0].split("").forEach((letter: string) => {
@@ -66,13 +63,10 @@ function solution32() {
 			}
 		});
 		const points = calcPriority(repeatingLetter);
-        console.log(points,' points')
 		sum += points;
 		repeatingLetter = "";
         counter += 1;
 	}
-	console.log(sum, " smth");
-    console.log(counter,' counter');
 }
 solution32();
 export default solution32;
