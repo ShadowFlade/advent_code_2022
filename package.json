@@ -1,0 +1,14 @@
+{
+	"name": "advent_code_2022",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.ts",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "Vladimir Drugov",
+	"license": "MIT",
+	"dependencies": {
+		"@types/node": "^20.10.4"
+	}
+}
