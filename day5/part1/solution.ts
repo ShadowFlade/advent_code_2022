@@ -5,7 +5,7 @@ export default function sol51() {
 	const data = fs.readFileSync(filepath, { encoding: "utf8" }).split("\n\n");
 
 	const cargo = data[0];
-	const instructions = data[1];
+	const instructions = data[1].split("\n");
 	const cargoLines = cargo.split("\n");
 	//lets work unser assumption that empty cargo space is 3chars long - 1 letter and 2 braces
 	const cargoHorizontal = [];
@@ -32,9 +32,9 @@ export default function sol51() {
 	const cargoVertical = [];
 	cargoHorizontal.forEach((cargoline, index) => {
 		cargoline.forEach((cargoitem, index) => {
-            if(!Number.isNaN(+cargoitem)){
-                return;
-            }
+			if (!Number.isNaN(+cargoitem)) {
+				return;
+			}
 			if (typeof cargoVertical[index] != "object") {
 				if (cargoitem !== " ") {
 					cargoVertical[index] = [cargoitem];
@@ -44,5 +44,23 @@ export default function sol51() {
 			}
 		});
 	});
-    console.log(cargoVertical,'vertical')
+	function getMove(moveline) {
+		const movelineRead = moveline.match(/move (\d+) from (\d+) to (\d+)/);
+		const move = {
+			amount: +movelineRead[1],
+			from: +movelineRead[2] - 1,
+			to: +movelineRead[3] - 1,
+		};
+		return move;
+	}
+	instructions.forEach((instr) => {
+		const move = getMove(instr);
+		for (let i = 0; i < move.amount; i++) {
+			const item = cargoVertical[move.from].shift();
+			item && cargoVertical[move.to].unshift(item);
+		}
+
+	});
+	let answer = "";
+	cargoVertical.forEach((item) => (answer += !!item[0] && item[0]));
 }
