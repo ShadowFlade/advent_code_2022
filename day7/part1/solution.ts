@@ -8,7 +8,7 @@ export default function main() {
 	const directories = {};
 	for (let i = 0; i < data.length - 1; i++) {
 		if (data[i][0] == "$") {
-			const parsed = data[i].match(/$ (.*) (.*)/);
+			const parsed = data[i].match(/\$ (.*)\s?(.+)/);
 			const command = parsed[1];
 			switch (command) {
 				case "cd":
@@ -21,6 +21,7 @@ export default function main() {
 						const newDirectory = {
 							prev: directories[currentDirectory],
 						};
+                        console.log('smth')
 						directories[currentDirectory][parsed[2]] = newDirectory;
 						directories[parsed[2]] = newDirectory;
 					}
@@ -34,22 +35,30 @@ export default function main() {
 					const filesAndDirectories = data.slice(i, nextCommandIndex);
 					//redundant copying, we can just filter out indexes and give calc function links to objects but whatever im lazy
 					const files = [];
-					const localDirectories = [];
 					filesAndDirectories.forEach((item) => {
 						if (item.slice(0, 3) != "dir") {
 							files.push(item);
-						} else {
-							localDirectories.push(item);
 						}
 					});
 
 					i += nextCommandIndex;
 					const dirWeight = calcDirectoryWeight(files);
-					directories[currentDirectory] += dirWeight;
+					directories[currentDirectory] += +dirWeight;
 					break;
 			}
 		}
 	}
+	let dirSum = 0;
+	console.log(directories);
+	Object.keys(directories).forEach((item) => {
+		if (item == "/") {
+			return;
+		} else {
+			console.log(directories[item], item, " item");
+			dirSum += directories[item];
+		}
+	});
+	console.info(dirSum, " sum");
 }
 
 function calcDirectoryWeight(files) {
