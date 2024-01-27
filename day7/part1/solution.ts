@@ -8,20 +8,25 @@ export default function main() {
 	const directories = {};
 	for (let i = 0; i < data.length - 1; i++) {
 		if (data[i][0] == "$") {
-			const parsed = data[i].match(/\$ (.*)\s?(.+)/);
+			const parsed = data[i].match(/\$ (w+)\s?(.+)/);
+            console.log(parsed,' parsed');
 			const command = parsed[1];
+            console.log(command,' command')
 			switch (command) {
 				case "cd":
 					if (currentDirectory == "..") {
 						currentDirectory = directories[parsed[2]].prev;
+                        console.log('go directory back');
 					} else if (parsed[2] == "/") {
+                        console.log('root');
 						directories["/"] = {};
 						currentDirectory = "/";
 					} else {
+                        console.log('new direcotry');
 						const newDirectory = {
 							prev: directories[currentDirectory],
 						};
-                        console.log('smth')
+						console.log("smth");
 						directories[currentDirectory][parsed[2]] = newDirectory;
 						directories[parsed[2]] = newDirectory;
 					}
