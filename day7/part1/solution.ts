@@ -15,15 +15,17 @@ export default function main() {
             console.log(command,' command')
 			switch (command) {
 				case "cd":
-					if (currentDirectory == "..") {
-						currentDirectory = directories[parsed[2]].prev;
+					if (parsed[2] == "..") {
                         console.log('go directory back');
+                        console.log(directories[parsed[2]],' prev')
+						currentDirectory = directories[parsed[2]].prev;
 					} else if (parsed[2] == "/") {
                         console.log('root');
 						directories["/"] = {};
 						currentDirectory = "/";
 					} else {
                         console.log('new direcotry');
+                        console.log(currentDirectory, parsed[2],directories['/'],' cur and parsed')
 						const newDirectory = {
 							prev: directories[currentDirectory],
 						};
@@ -37,15 +39,20 @@ export default function main() {
 				case "ls":
 					const nextCommandIndex = data.findIndex(
 						(item, index) => index > i && item[0] == "$"
-					);
+					) - 1;
 					const filesAndDirectories = data.slice(i + 1, nextCommandIndex);
 					//redundant copying, we can just filter out indexes and give calc function links to objects but whatever im lazy
 					const files = [];
 					filesAndDirectories.forEach((item) => {
 						if (item.slice(0, 3) != "dir") {
 							files.push(item);
-						}
+						} else if (item.slice(0,3) == 'dir'){
+                            const newDir = {};
+                            directories[item] = newDir;
+                            directories[currentDirectory][item] = newDir;
+                        }
 					});
+
 
 					i += nextCommandIndex;
 					const dirWeight = calcDirectoryWeight(files);
