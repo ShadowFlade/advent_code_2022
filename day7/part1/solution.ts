@@ -8,7 +8,8 @@ export default function main() {
 	const directories = {};
 	for (let i = 0; i < data.length - 1; i++) {
 		if (data[i][0] == "$") {
-			const parsed = data[i].match(/\$ (w+)\s?(.+)/);
+            console.log(data[i]);
+			const parsed = data[i].match(/\$ (\w+)(?:$| (.+))/);
             console.log(parsed,' parsed');
 			const command = parsed[1];
             console.log(command,' command')
@@ -37,7 +38,7 @@ export default function main() {
 					const nextCommandIndex = data.findIndex(
 						(item, index) => index > i && item[0] == "$"
 					);
-					const filesAndDirectories = data.slice(i, nextCommandIndex);
+					const filesAndDirectories = data.slice(i + 1, nextCommandIndex);
 					//redundant copying, we can just filter out indexes and give calc function links to objects but whatever im lazy
 					const files = [];
 					filesAndDirectories.forEach((item) => {
@@ -69,7 +70,8 @@ export default function main() {
 function calcDirectoryWeight(files) {
 	let sum = 0;
 	for (let i = 0; i < files.length - 1; i++) {
-		const fileSize = +files.match(/\d+/)[0];
+        console.log(files[i],' file')
+		const fileSize = +files[i].match(/\d+/)[0];
 		sum += fileSize;
 	}
 	return sum;
