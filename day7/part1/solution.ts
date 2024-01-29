@@ -8,32 +8,23 @@ export default function main() {
 	const directories = {};
 	for (let i = 0; i < data.length - 1; i++) {
 		if (data[i][0] == "$") {
-            console.log(data[i]);
 			const parsed = data[i].match(/\$ (\w+)(?:$| (.+))/);
-            console.log(parsed,' parsed');
 			const command = parsed[1];
-            console.log(command,' command')
 			switch (command) {
 				case "cd":
 					if (parsed[2] == "..") {
-                        console.log('go directory back');
-                        console.log(directories[parsed[2]],' prev')
 						currentDirectory = directories[parsed[2]].prev;
 					} else if (parsed[2] == "/") {
-                        console.log('root');
-						directories["/"] = {};
+						directories["/"] = {weight: 0};
 						currentDirectory = "/";
 					} else {
-                        console.log('new direcotry');
-                        console.log(currentDirectory, parsed[2],directories['/'],' cur and parsed')
 						const newDirectory = {
 							prev: directories[currentDirectory],
+                            weight: 0
 						};
-						console.log("smth");
 						directories[currentDirectory][parsed[2]] = newDirectory;
 						directories[parsed[2]] = newDirectory;
 					}
-
 					currentDirectory = parsed[2];
 					break;
 				case "ls":
@@ -48,38 +39,36 @@ export default function main() {
 							files.push(item);
 						} else if (item.slice(0,3) == 'dir'){
                             const newDir = {};
-                            directories[item] = newDir;
-                            directories[currentDirectory][item] = newDir;
+                            directories[item.slice(5)] = newDir;
+                            directories[currentDirectory][item.slice(5)] = newDir;
                         }
 					});
-
-
 					i += nextCommandIndex;
 					const dirWeight = calcDirectoryWeight(files);
-					directories[currentDirectory] += +dirWeight;
+					directories[currentDirectory].weight += +dirWeight;
 					break;
 			}
 		}
 	}
 	let dirSum = 0;
-	console.log(directories);
 	Object.keys(directories).forEach((item) => {
 		if (item == "/") {
 			return;
 		} else {
-			console.log(directories[item], item, " item");
-			dirSum += directories[item];
+            const dirWeight = +directories[item].weight;
+            if(typeof dirWeight == 'number' && !isNaN(dirWeight)){
+                dirSum += dirWeight
+            }
 		}
 	});
-	console.info(dirSum, " sum");
+    console.log(dirSum,' sum')
 }
 
 function calcDirectoryWeight(files) {
 	let sum = 0;
-	for (let i = 0; i < files.length - 1; i++) {
-        console.log(files[i],' file')
-		const fileSize = +files[i].match(/\d+/)[0];
-		sum += fileSize;
+	for (let i = 0; i < files.length; i++) {
+		const fileSize = files[i].match(/\d+/)[0];
+		sum += +fileSize;
 	}
 	return sum;
 }
