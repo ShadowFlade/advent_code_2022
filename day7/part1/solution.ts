@@ -15,7 +15,6 @@ export default function main() {
 				data.findIndex((item, index) => index > i && item[0] == "$") -
 				1 -
 				+i;
-			console.log(nextCommandIndex, " next command index");
 			switch (command) {
 				case "cd":
 					if (parsed[2] == "..") {
@@ -42,10 +41,8 @@ export default function main() {
 					);
 					//redundant copying, we can just filter out indexes and give calc function links to objects but whatever im lazy
 					const files = [];
-					console.log(filesAndDirectories, " files and directories");
 					filesAndDirectories.forEach((item) => {
 						if (item.slice(0, 3) != "dir") {
-							console.log(item.slice(0, 3), " not dir?");
 							files.push(item);
 						} else if (item.slice(0, 3) == "dir") {
 							const newDir = {};
@@ -54,9 +51,20 @@ export default function main() {
 								newDir;
 						}
 					});
-					console.log(files, " calcing files");
 					const dirWeight = calcDirectoryWeight(files);
 					directories[currentDirectory].weight += +dirWeight;
+					let temp = currentDirectory;
+                    // ye, rly no idea why it throws an infinite loop
+					while (
+						directories[temp] &&
+						directories[temp].prev &&
+						directories[temp].prev.prev
+					) {
+						directories[temp].prev.weight += dirWeight;
+						temp = directories[temp].prev.prev.name;
+						console.log(temp, " temp");
+					}
+					//
 					break;
 			}
 
@@ -75,6 +83,7 @@ export default function main() {
 				!isNaN(newWeight) &&
 				newWeight <= 100_000
 			) {
+				console.log(directories[item], " item");
 				dirSum += newWeight;
 			}
 		}
@@ -85,9 +94,7 @@ export default function main() {
 function calcDirectoryWeight(files) {
 	let sum = 0;
 	for (let i = 0; i < files.length; i++) {
-        console.log('123123',files[i]);
 		if (files[i].includes("vcq.flg")) {
-			console.log(files[i], " file");
 		}
 		const fileSize = files[i].match(/\d+/)[0];
 		sum += +fileSize;
